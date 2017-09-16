@@ -1,8 +1,11 @@
 #include <iostream>
+#include <sstream>
+#include "../include/logger.hpp"
 
 int main(int argc, char **argv) {
+    Logger log;
 
-    std::cout << "test" << std::endl;
-    
+    log.info(std::stringstream() << "test");
+
     return EXIT_SUCCESS;
 }
