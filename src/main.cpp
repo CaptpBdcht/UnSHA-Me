@@ -1,12 +1,15 @@
-#include <sstream>
-#include "../include/logger.hpp"
-#include "../include/thread_pool.hpp"
+#include "../include/arguments.hpp"
+#include "../include/bruteforce.hpp"
 
 int main(int argc, char **argv) {
-    Logger log;
-    ThreadPool threadPool(5);
 
-    log.info(std::stringstream() << "test");
+    Arguments arguments;
+
+    arguments.analyseArguments(argc, argv);
+
+    Bruteforce bruteforce(arguments.getThreadsNumber(), arguments.getHashedPassword());
+
+    bruteforce.startBruteforce();
 
     return EXIT_SUCCESS;
 }

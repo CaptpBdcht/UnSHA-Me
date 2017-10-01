@@ -6,13 +6,13 @@
 
 class Logger {
 
-    public:
-        void info(const std::ostream &stream);
-        void debug(const std::ostream &stream);
-        void error(const std::ostream &stream);
-    
-    private:
-        std::mutex mutex;
+public:
+    void info(const std::ostream &stream, std::string prefix = "[INFO] ");
+    void debug(const std::ostream &stream);
+    void error(const std::ostream &stream);
+
+private:
+    std::mutex mutex;
 };
 
 #endif
