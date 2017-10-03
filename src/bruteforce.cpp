@@ -7,24 +7,18 @@ Bruteforce::Bruteforce(int threadsNumber, std::string hash) :
 void Bruteforce::startBruteforce() {
 
     Logger log;
-    //volatile bool endMultiThreadLoop = false;
-
     omp_set_num_threads(nbThreads);
 
     double start = omp_get_wtime();
 
-    //#pragma omp parallel for shared(endMultiThreadLoop)
     for (uint8_t i = minPassLength; i <= maxPassLength; ++i) {
-
-        //if (endMultiThreadLoop)
-        //    continue;
+        log.info(std::stringstream() << std::to_string(i));
 
         std::string searchPassword = checkGeneratedWordsByLength(alphabet, i);
 
         if (!searchPassword.empty()) {
             log.info(std::stringstream() << searchPassword);
             break;
-            //endMultiThreadLoop = true;
         }
     }
 
@@ -36,7 +30,6 @@ void Bruteforce::startBruteforce() {
 std::string Bruteforce::checkGeneratedWordsByLength(const char *alphabet, uint8_t length) {
 
     std::vector<uint8_t> indexesVector(length, 0);
-    //std::string searchWord;
 
     while (true) {
 
@@ -46,8 +39,6 @@ std::string Bruteforce::checkGeneratedWordsByLength(const char *alphabet, uint8_
             generatedWord[i] = alphabet[indexesVector[i]];
 
         if (isSearchedSHA256Hash(generatedWord)) {
-            //searchWord = generatedWord;
-            //endMultiThreadLoop = true;
             return generatedWord;
         }
 
@@ -55,7 +46,6 @@ std::string Bruteforce::checkGeneratedWordsByLength(const char *alphabet, uint8_
 
             if (i < 0)
                 return "";
-                //endMultiThreadLoop = true;
 
             ++indexesVector[i];
 
@@ -65,15 +55,21 @@ std::string Bruteforce::checkGeneratedWordsByLength(const char *alphabet, uint8_
                 break;
         }
     }
-
-    //return searchWord;
 }
 
 bool Bruteforce::isSearchedSHA256Hash(const std::string &wordToHash) {
 
-    std::string hashedWord;
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    std::stringstream hashedWord;
+    SHA256_CTX sha256;
 
-    picosha2::hash256_hex_string(wordToHash, hashedWord);
+    SHA256_Init(&sha256);
+    SHA256_Update(&sha256, wordToHash.c_str(), wordToHash.size());
+    SHA256_Final(hash, &sha256);
 
-    return hashedWord == hashedPassword;
+    for (unsigned char i : hash) {
+        hashedWord << std::hex << std::setw(2) << std::setfill('0') << (int) i;
+    }
+
+    return hashedWord.str() == hashedPassword;
 }

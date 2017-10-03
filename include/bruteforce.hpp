@@ -8,9 +8,11 @@
 #include <algorithm>
 #include <vector>
 #include <omp.h>
+#include <openssl/sha.h>
+#include <omp.h>
+#include <iomanip>
 
 #include "logger.hpp"
-#include "picosha.hpp"
 
 class Bruteforce {
     

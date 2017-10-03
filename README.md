@@ -7,3 +7,6 @@
 
 ## Optimisations
 * inline (remplace l'appel d'une fonction par le contenu de la fonction à la compilation)
+
+## Before
+Install libs : sudo apt-get install libssl-dev
