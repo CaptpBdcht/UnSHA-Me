@@ -27,7 +27,7 @@ void Bruteforce::startBruteforce() {
     log.info(std::stringstream() << "Executed Time : " << end - start);
 }
 
-std::string Bruteforce::checkGeneratedWordsByLength(const char *alphabet, uint8_t length) {
+inline std::string Bruteforce::checkGeneratedWordsByLength(const char *alphabet, uint8_t length) {
 
     std::vector<uint8_t> indexesVector(length, 0);
 
@@ -57,7 +57,7 @@ std::string Bruteforce::checkGeneratedWordsByLength(const char *alphabet, uint8_
     }
 }
 
-bool Bruteforce::isSearchedSHA256Hash(const std::string &wordToHash) {
+inline bool Bruteforce::isSearchedSHA256Hash(const std::string &wordToHash) {
 
     unsigned char hash[SHA256_DIGEST_LENGTH];
     std::stringstream hashedWord;
