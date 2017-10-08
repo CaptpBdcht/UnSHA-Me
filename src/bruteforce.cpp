@@ -1,29 +1,24 @@
 #include "../include/bruteforce.hpp"
 
-Bruteforce::Bruteforce(int threadsNumber, std::string hash) :
-    nbThreads(threadsNumber), 
+Bruteforce::Bruteforce(std::string hash) :
     hashedPassword(std::move(hash)) {}
 
-void Bruteforce::startBruteforce() {
+void Bruteforce::startBruteforce(uint8_t wordLen) {
 
     Logger log;
-    omp_set_num_threads(nbThreads);
 
     double start = omp_get_wtime();
 
-    for (uint8_t i = minPassLength; i <= maxPassLength; ++i) {
-        log.info(std::stringstream() << std::to_string(i));
+    log.info(std::stringstream() << std::to_string(wordLen));
 
-        std::string searchPassword = checkGeneratedWordsByLength(alphabet, i);
+    std::string searchPassword = checkGeneratedWordsByLength(alphabet, wordLen);
 
-        if (!searchPassword.empty()) {
-            log.info(std::stringstream() << searchPassword);
-            break;
-        }
-    }
+    if (!searchPassword.empty())
+        log.info(std::stringstream() << searchPassword);
 
     double end = omp_get_wtime();
 
+    log.info(std::stringstream() << "Word Len : " << std::to_string(unsigned(wordLen)));
     log.info(std::stringstream() << "Executed Time : " << end - start);
 }
 

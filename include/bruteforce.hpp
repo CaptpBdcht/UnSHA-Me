@@ -17,17 +17,14 @@
 class Bruteforce {
     
 public:
-    Bruteforce(int, std::string);
-    void startBruteforce();
+    Bruteforce(std::string);
+    void startBruteforce(uint8_t);
     std::string checkGeneratedWordsByLength(const char *, uint8_t);
     bool isSearchedSHA256Hash(const std::string &);
 
 private:
     const char *alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
-    int nbThreads;
     std::string hashedPassword;
-    uint8_t minPassLength = 1;
-    uint8_t maxPassLength = 100;
 };
 
 #endif
