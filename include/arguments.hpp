@@ -11,11 +11,12 @@
 class Arguments {
 
 public:
-    void analyseArguments(int argc, char **argv);
-    int getThreadsNumber();
+    void analyseArguments(int, char **);
+    uint8_t getThreadsNumber();
     std::string getHashedPassword();
+
 private:
-    int threadsNumber = 4;
+    uint8_t threadsNumber = 4;
     std::string hashedPassword = "";
 };
 

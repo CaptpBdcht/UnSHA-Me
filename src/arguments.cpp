@@ -8,7 +8,7 @@ void Arguments::analyseArguments(int argc, char **argv) {
         if (argc < 3)
             throw std::string("Wrong number of arguments.");
         
-        threadsNumber = std::stoi(argv[1]);
+        threadsNumber = static_cast<uint8_t>(std::stoi(argv[1]));
         hashedPassword = argv[2];
     }
     catch (std::string const& str) {
@@ -21,7 +21,7 @@ void Arguments::analyseArguments(int argc, char **argv) {
     }
 }
 
-int Arguments::getThreadsNumber() {
+uint8_t Arguments::getThreadsNumber() {
     return threadsNumber;
 }
 

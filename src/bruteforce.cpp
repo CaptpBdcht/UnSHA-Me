@@ -3,26 +3,7 @@
 Bruteforce::Bruteforce(std::string hash) :
     hashedPassword(std::move(hash)) {}
 
-void Bruteforce::startBruteforce(uint8_t wordLen) {
-
-    Logger log;
-
-    double start = omp_get_wtime();
-
-    log.info(std::stringstream() << std::to_string(wordLen));
-
-    std::string searchPassword = checkGeneratedWordsByLength(alphabet, wordLen);
-
-    if (!searchPassword.empty())
-        log.info(std::stringstream() << searchPassword);
-
-    double end = omp_get_wtime();
-
-    log.info(std::stringstream() << "Word Len : " << std::to_string(unsigned(wordLen)));
-    log.info(std::stringstream() << "Executed Time : " << end - start);
-}
-
-inline std::string Bruteforce::checkGeneratedWordsByLength(const char *alphabet, uint8_t length) {
+std::string Bruteforce::startBruteforceByWordLength(uint8_t length) {
 
     std::vector<uint8_t> indexesVector(length, 0);
     SHA256_CTX sha256;

@@ -13,13 +13,13 @@
 #include <vector>
 #include <omp.h>
 #include <openssl/sha.h>
-#include <omp.h>
 #include <iomanip>
 
 #include "logger.hpp"
+#include "bruteforce.hpp"
 
-#define MIN_SIZE 1
-#define MAX_SIZE 20
+#define MIN_WORD_SIZE 1
+#define MAX_WORD_SIZE 20
 
 class ThreadedBruteforce {
 
