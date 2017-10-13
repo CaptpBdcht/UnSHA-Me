@@ -20,7 +20,7 @@ public:
     Bruteforce(std::string);
     void startBruteforce(uint8_t);
     std::string checkGeneratedWordsByLength(const char *, uint8_t);
-    bool isSearchedSHA256Hash(const std::string &);
+    bool isSearchedSHA256Hash(const std::string &, SHA256_CTX);
 
 private:
     const char *alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
