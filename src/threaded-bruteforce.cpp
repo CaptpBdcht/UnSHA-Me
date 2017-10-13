@@ -8,7 +8,8 @@ ThreadedBruteforce::ThreadedBruteforce(
     bruteforcers(nbThreads),
     mutex(),
     cv(),
-    hashedPass(hashedPass)
+    hashedPass(hashedPass),
+    foundHash(false)
 {
     for (uint8_t i = 1; i <= nbThreads; ++i) {
         bruteforcers.emplace_front(std::thread(
@@ -32,7 +33,12 @@ void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
     log.info(std::stringstream() << "=> thread id : " << std::to_string(id));
     
     Bruteforce bruteforce(hashedPass);
-    
+
+    /*std::unique_lock<std::mutex> lock(mutex);
+    cv.wait(lock, [&]() {
+       return !foundHash;
+    });*/
+
     for (uint8_t wordLength = id; wordLength < MAX_WORD_SIZE; wordLength += nbThreads) {
 
         double start = omp_get_wtime();
@@ -46,7 +52,9 @@ void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
 
         if (!result.empty()) {
             log.info(std::stringstream() << "Result Password : " << result);
-            // TODO Notify all threads
+
+            foundHash = true;
+            cv.notify_all();
             break;
         }
     }

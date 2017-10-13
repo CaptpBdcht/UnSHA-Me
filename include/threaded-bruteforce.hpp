@@ -14,6 +14,7 @@
 #include <omp.h>
 #include <openssl/sha.h>
 #include <iomanip>
+#include <atomic>
 
 #include "logger.hpp"
 #include "bruteforce.hpp"
@@ -35,7 +36,7 @@ private:
 	std::condition_variable cv;
     const std::string hashedPass;
     
-    bool foundHash = false;
+    std::atomic<bool> foundHash;
 };
 
 #endif
