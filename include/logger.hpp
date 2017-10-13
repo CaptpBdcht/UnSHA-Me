@@ -7,9 +7,9 @@
 class Logger {
 
 public:
-    void info(const std::ostream &stream, std::string prefix = "[INFO] ");
-    void debug(const std::ostream &stream);
-    void error(const std::ostream &stream);
+    void info(const std::ostream &, std::string prefix = "[INFO] ");
+    void debug(const std::ostream &);
+    void error(const std::ostream &);
 
 private:
     std::mutex mutex;

@@ -15,9 +15,9 @@
 class Bruteforce {
     
 public:
-    Bruteforce(std::string);
+    explicit Bruteforce(std::string);
     std::string startBruteforceByWordLength(uint8_t);
-    bool isSearchedSHA256Hash(const std::string &, SHA256_CTX);
+    bool isSearchedSHA256Hash(char **, SHA256_CTX);
 
 private:
     const char *alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";

@@ -12,13 +12,13 @@ std::string Bruteforce::startBruteforceByWordLength(uint8_t length) {
 
     while (true) {
 
-        std::string generatedWord(indexesVector.size(), ' ');
+        char *generatedWord = static_cast<char *>(malloc(indexesVector.size()));
 
         for (uint8_t i = 0; i < indexesVector.size(); ++i) {
             generatedWord[i] = alphabet[indexesVector[i]];
         }
 
-        if (isSearchedSHA256Hash(generatedWord, sha256)) {
+        if (isSearchedSHA256Hash(&generatedWord, sha256)) {
             return generatedWord;
         }
 
@@ -34,15 +34,19 @@ std::string Bruteforce::startBruteforceByWordLength(uint8_t length) {
             else
                 break;
         }
+
+        if (generatedWord != nullptr) {
+            free(generatedWord);
+        }
     }
 }
 
-inline bool Bruteforce::isSearchedSHA256Hash(const std::string &wordToHash, SHA256_CTX sha256) {
+inline bool Bruteforce::isSearchedSHA256Hash(char **wordToHash, SHA256_CTX sha256) {
 
     uint8_t hash[SHA256_DIGEST_LENGTH];
     std::stringstream hashedWord;
 
-    SHA256_Update(&sha256, wordToHash.c_str(), wordToHash.size());
+    SHA256_Update(&sha256, *wordToHash, strlen(*wordToHash));
     SHA256_Final(hash, &sha256);
 
     for (uint8_t i : hash) {

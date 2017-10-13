@@ -46,6 +46,7 @@ void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
 
         if (!result.empty()) {
             log.info(std::stringstream() << "Result Password : " << result);
+            // TODO Notify all threads
             break;
         }
     }
