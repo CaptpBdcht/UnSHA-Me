@@ -12,10 +12,10 @@
 #include <algorithm>
 #include <vector>
 #include <omp.h>
-#include <openssl/sha.h>
 #include <iomanip>
 #include <atomic>
 
+#include "sha.h"
 #include "logger.hpp"
 #include "bruteforce.hpp"
 
