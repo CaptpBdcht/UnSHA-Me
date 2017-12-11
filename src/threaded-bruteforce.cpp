@@ -32,12 +32,7 @@ void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
 
     log.info(std::stringstream() << "=> thread id : " << std::to_string(id));
 
-    /*std::unique_lock<std::mutex> lock(mutex);
-    cv.wait(lock, [&]() {
-       return !foundHash;
-    });*/
-
-    for (uint8_t wordLength = id; wordLength < MAX_WORD_SIZE; wordLength += nbThreads) {
+    for (uint8_t wordLength = id; wordLength < MAX_WORD_SIZE, !foundHash; wordLength += nbThreads) {
 
         double start = omp_get_wtime();
 
@@ -51,6 +46,7 @@ void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
         if (!result.empty()) {
             log.info(std::stringstream() << "Result Password : " << result);
 
+            std::unique_lock<std::mutex> lock(mutex);
             foundHash = true;
             cv.notify_all();
             break;
@@ -65,7 +61,7 @@ std::string ThreadedBruteforce::startBruteforceByWordLength(uint8_t length) {
 
     SHA256_Init(&sha256);
 
-    while (true) {
+    while (!foundHash) {
 
         char *generatedWord = static_cast<char *>(malloc(indexesVector.size()));
 
