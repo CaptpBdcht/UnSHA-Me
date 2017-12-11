@@ -11,7 +11,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -fmax-errors=2")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 # Flags for AVX512 -mavx512f -mavx512cd -mavx512bw -mavx512dq -mavx512vl -mavx512ifma -mavx512vbmi
 
-set(SOURCE_FILES include/sha.h include/e_os2.h include/opensslconf.h src/main.cpp src/logger.cpp include/logger.hpp src/arguments.cpp include/arguments.hpp src/bruteforce.cpp include/bruteforce.hpp src/threaded-bruteforce.cpp include/threaded-bruteforce.hpp)
+set(SOURCE_FILES include/sha.h include/e_os2.h include/opensslconf.h src/main.cpp src/logger.cpp include/logger.hpp src/arguments.cpp include/arguments.hpp src/threaded-bruteforce.cpp include/threaded-bruteforce.hpp)
 
 add_executable(unsha-me ${SOURCE_FILES})
 

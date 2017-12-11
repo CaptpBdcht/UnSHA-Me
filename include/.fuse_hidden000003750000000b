@@ -12,11 +12,12 @@
 #include <algorithm>
 #include <vector>
 #include <omp.h>
+#include <openssl/sha.h>
 #include <iomanip>
 #include <atomic>
 
-#include "sha.h"
 #include "logger.hpp"
+#include "bruteforce.hpp"
 
 #define MIN_WORD_SIZE 1
 #define MAX_WORD_SIZE 20
@@ -27,8 +28,6 @@ public:
     ThreadedBruteforce(uint8_t, std::string);
     ~ThreadedBruteforce();
     void threadedBruteforcer(uint8_t);
-    std::string startBruteforceByWordLength(uint8_t);
-    bool isSearchedSHA256Hash(char **, SHA256_CTX);
 
 private:
     const uint8_t nbThreads;
@@ -36,7 +35,6 @@ private:
 	std::mutex mutex;
 	std::condition_variable cv;
     const std::string hashedPass;
-    const char *alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ";
     
     std::atomic<bool> foundHash;
 };
