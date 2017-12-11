@@ -7,9 +7,10 @@
 #include <sstream>
 #include <algorithm>
 #include <vector>
-#include <openssl/sha.h>
+
 #include <iomanip>
 
+#include "sha.h"
 #include "logger.hpp"
 
 class Bruteforce {
