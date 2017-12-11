@@ -177,7 +177,8 @@ private:
 
                 // printer.print("Consumed: " + std::string(queue.front()));
             
-                bool isSearchWord = computeSHA256(queue.front(), sha256);
+                char* front = queue.front();
+                bool isSearchWord = computeSHA256(front, sha256);
                 queue.pop();
                 ++consumed;
 
@@ -200,7 +201,7 @@ private:
 
     bool computeSHA256(char *wordToHash, SHA256_CTX sha256) {
 
-        printer.print("Computing: " + std::string(wordToHash));
+        // printer.print("Computing: " + std::string(wordToHash));
 
         uint8_t hash[SHA256_DIGEST_LENGTH];
         std::stringstream hashedWord;
@@ -220,7 +221,7 @@ private:
 int main() {
     // 1 1 'help'
 	ProducerConsumer producerConsumer(
-        2, 1,
+        1, 1,
         "106a5842fc5fce6f663176285ed1516dbb1e3d15c05abab12fdca46d60b539b7"
     );
 
