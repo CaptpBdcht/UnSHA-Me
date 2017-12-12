@@ -1,0 +1,6 @@
+/opt/apps/CLion/ch-0/173.3727.114/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - Unix Makefiles" /home/esp010/Bureau/UnSHA-Me
+-- Found OpenMP_C: -fopenmp  
+-- Found OpenMP_CXX: -fopenmp  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/esp010/Bureau/UnSHA-Me/cmake-build-release
