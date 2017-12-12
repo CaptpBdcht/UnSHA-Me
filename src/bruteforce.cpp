@@ -1,7 +1,7 @@
 #include "../include/bruteforce.hpp"
 
 Bruteforce::Bruteforce(std::string hash) :
-    hashedPassword(std::move(hash)) {}
+        hashedPassword(std::move(hash)) {}
 
 std::string Bruteforce::startBruteforceByWordLength(uint8_t length) {
 
@@ -22,7 +22,7 @@ std::string Bruteforce::startBruteforceByWordLength(uint8_t length) {
             return generatedWord;
         }
 
-        for (long i = indexesVector.size() - 1;; --i) {
+        for (unsigned long i = indexesVector.size() - 1;; --i) {
 
             if (i < 0)
                 return "";
