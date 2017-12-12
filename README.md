@@ -10,6 +10,8 @@
 * https://www.andrew.cmu.edu/user/mkellogg/15-418/final.html
 * https://software.intel.com/sites/landingpage/IntrinsicsGuide/
 
+https://software.intel.com/en-us/articles/step-by-step-optimizing-with-intel-c-compiler
+
 ## Optimisations
 * inline (remplace l'appel d'une fonction par le contenu de la fonction à la compilation)
 

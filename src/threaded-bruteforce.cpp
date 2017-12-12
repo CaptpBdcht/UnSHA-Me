@@ -30,9 +30,8 @@ void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
 {
     Logger log;
 
-    #ifndef NDEBUG
-        log.info(std::stringstream() << "=> thread id : " << std::to_string(id));
-    #endif
+
+    log.debug(std::stringstream() << "=> thread id : " << std::to_string(id));
 
     for (uint8_t wordLength = id; wordLength < MAX_WORD_SIZE, !foundHash; wordLength += nbThreads) {
 
@@ -44,11 +43,8 @@ void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
 
         if (!result.empty()) {
 
-            #ifndef NDEBUG
-                log.info(std::stringstream() << "Executed Time : " << end - start);
-            #endif
-
-            log.info(std::stringstream() << "Result Password : " << result);
+            log.debug(std::stringstream() << "Executed Time : " << end - start);
+            log.info(std::stringstream() << result << std::endl);
 
             std::unique_lock<std::mutex> lock(mutex);
             foundHash = true;
