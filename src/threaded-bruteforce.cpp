@@ -40,10 +40,8 @@ void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
 
         double end = omp_get_wtime();
 
-        log.info(std::stringstream() << "Word Len : " << std::to_string(wordLength));
-        log.info(std::stringstream() << "Executed Time : " << end - start);
-
         if (!result.empty()) {
+            log.info(std::stringstream() << "Executed Time : " << end - start);
             log.info(std::stringstream() << "Result Password : " << result);
 
             std::unique_lock<std::mutex> lock(mutex);
@@ -54,7 +52,7 @@ void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
     }
 }
 
-std::string ThreadedBruteforce::startBruteforceByWordLength(uint8_t length) {
+inline std::string ThreadedBruteforce::startBruteforceByWordLength(uint8_t length) {
 
     std::vector<uint8_t> indexesVector(length, 0);
     SHA256_CTX sha256;
