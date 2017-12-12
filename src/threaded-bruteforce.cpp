@@ -30,7 +30,9 @@ void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
 {
     Logger log;
 
-    log.info(std::stringstream() << "=> thread id : " << std::to_string(id));
+    #ifndef NDEBUG
+        log.info(std::stringstream() << "=> thread id : " << std::to_string(id));
+    #endif
 
     for (uint8_t wordLength = id; wordLength < MAX_WORD_SIZE, !foundHash; wordLength += nbThreads) {
 
@@ -41,12 +43,17 @@ void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
         double end = omp_get_wtime();
 
         if (!result.empty()) {
-            log.info(std::stringstream() << "Executed Time : " << end - start);
+
+            #ifndef NDEBUG
+                log.info(std::stringstream() << "Executed Time : " << end - start);
+            #endif
+
             log.info(std::stringstream() << "Result Password : " << result);
 
             std::unique_lock<std::mutex> lock(mutex);
             foundHash = true;
             cv.notify_all();
+
             break;
         }
     }
