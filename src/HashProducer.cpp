@@ -5,39 +5,66 @@
 
 using namespace std;
 
-HashProducer::HashProducer(const std::string alphabet) : alphabet(alphabet) {
-    SHA256_Init(&sha256);
+HashProducer::HashProducer(const std::string alphabet) : alphabet(alphabet), shouldStop(false) {
 }
 
 void HashProducer::startWordGeneration() {
     sort(alphabet.begin(), alphabet.end());
     do {
-        auto anagram = new char[alphabet.length() + 1];
-        strcpy(anagram, alphabet.c_str());
-
-        const string result = hashWord(&anagram);
+        char mdString[SHA256_DIGEST_LENGTH * 2 + 1];
+        const string result = hashWord(alphabet.c_str(), mdString);
+        generatedHashesMap.insert(make_pair(result, alphabet));
         generatedHashes.push_back(result);
-        cout << result << endl;
+//        cout << "<" << alphabet << "," << result << ">" << endl;
     } while (next_permutation(alphabet.begin(), alphabet.end()));
+    while (!isHashAvailable()) {}
+    shouldStop = true;
 }
 
-const string &HashProducer::consumeWord() {
-    unique_lock <std::mutex> lock(mutex);
+bool HashProducer::isHashAvailable() {
+//    isHashEmptyMutex.lock();
+    const bool isAvailable = !generatedHashes.empty();
+//    isHashEmptyMutex.unlock();
+
+    return isAvailable;
+}
+
+bool HashProducer::isRunning() {
+//    runningMutex.lock();
+    const bool isRunning = !shouldStop;
+//    runningMutex.unlock();
+//    condition.wait(lock); // release lock and go join the waiting thread queue
+    return isRunning;
+}
+
+const string HashProducer::consumeWord() {
+    mutex.lock();
     const string word = generatedHashes.front();
-    condition.wait(lock); // release lock and go join the waiting thread queue
+    generatedHashes.pop_front();
+    mutex.unlock();
     return word;
 }
 
-const string HashProducer::hashWord(char **wordToHash) {
-    uint8_t hash[SHA256_DIGEST_LENGTH];
-    std::stringstream hashedWord;
+const string HashProducer::hashWord(const char *wordToHash, char *output) {
+    unsigned char digest[SHA256_DIGEST_LENGTH];
 
-    SHA256_Update(&sha256, *wordToHash, strlen(*wordToHash));
-    SHA256_Final(hash, &sha256);
+    SHA256_CTX ctx{};
+    SHA256_Init(&ctx);
+    SHA256_Update(&ctx, wordToHash, strlen(wordToHash));
+    SHA256_Final(digest, &ctx);
 
-    for (uint8_t i : hash) {
-        hashedWord << std::hex << std::setw(2) << std::setfill('0') << (int) i;
+    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+        sprintf(&output[i * 2], "%02x", (unsigned int) digest[i]);
     }
 
-    return hashedWord.str();
+    return output;
+}
+
+void HashProducer::notifyHashFound(bool hashFound, const std::string hash) {
+    hashFoundMutex.lock();
+    if (hashFound && generatedHashesMap.find(hash) != generatedHashesMap.end()) {
+        cout << generatedHashesMap[hash] << endl;
+    }
+    shouldStop = true;
+    hashFoundMutex.unlock();
 }

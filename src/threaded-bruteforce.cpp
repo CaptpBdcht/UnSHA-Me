@@ -1,38 +1,34 @@
 #include "../include/threaded-bruteforce.hpp"
 
 ThreadedBruteforce::ThreadedBruteforce(
-    const uint8_t nbThreads,
-    const std::string hashedPass
+        const uint8_t nbThreads,
+        std::string hashedPass,
+        Bruteforce* bruteforce
 ) :
-    nbThreads(nbThreads),
-    bruteforcers(nbThreads),
-    mutex(),
-    cv(),
-    hashedPass(hashedPass),
-    foundHash(false)
-{
-    for (uint8_t i = 1; i <= nbThreads; ++i) {
-        bruteforcers.emplace_front(std::thread(
-            &ThreadedBruteforce::threadedBruteforcer,
-            this, i
-        ));
-    }
+        nbThreads(nbThreads),
+        mutex(),
+        cv(),
+        hashedPass(hashedPass),
+        foundHash(false),
+        bruteforce(bruteforce) {
+//    for (uint8_t i = 1; i <= nbThreads; ++i) {
+//        bruteforcers.emplace_front(std::thread(
+//                &ThreadedBruteforce::threadedBruteforcer,
+//                this, i
+//        ));
+//    }
 }
 
-ThreadedBruteforce::~ThreadedBruteforce()
-{
-    for (uint8_t i = 0; i < nbThreads; ++i) {
-        bruteforcers[i].join();
-    }
-}
+//ThreadedBruteforce::~ThreadedBruteforce() {
+//    for (uint8_t i = 0; i < nbThreads; ++i) {
+//        bruteforcers[i].join();
+//    }
+//}
 
-void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
-{
+void ThreadedBruteforce::threadedBruteforcer(const uint8_t id) {
     Logger log;
 
     log.info(std::stringstream() << "=> thread id : " << std::to_string(id));
-    
-    Bruteforce bruteforce(hashedPass);
 
     /*std::unique_lock<std::mutex> lock(mutex);
     cv.wait(lock, [&]() {
@@ -43,19 +39,28 @@ void ThreadedBruteforce::threadedBruteforcer(const uint8_t id)
 
         double start = omp_get_wtime();
 
-        std::string result = bruteforce.startBruteforceByWordLength(wordLength);
+        bool result = bruteforce->startBruteforceByWordLength(wordLength);
 
         double end = omp_get_wtime();
 
         log.info(std::stringstream() << "Word Len : " << std::to_string(wordLength));
         log.info(std::stringstream() << "Executed Time : " << end - start);
 
-        if (!result.empty()) {
-            log.info(std::stringstream() << "Result Password : " << result);
+        if (result) {
+//            log.info(std::stringstream() << "Result Password : " << result);
 
             foundHash = true;
-            cv.notify_all();
+            bruteforce->notifyHashFound();
+//            cv.notify_all();
             break;
         }
     }
+}
+
+//std::deque<std::thread> &ThreadedBruteforce::getBruteforcers() {
+//    return bruteforcers;
+//}
+
+const uint8_t ThreadedBruteforce::getNbThreads() const {
+    return nbThreads;
 }

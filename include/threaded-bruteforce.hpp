@@ -25,19 +25,24 @@
 class ThreadedBruteforce {
 
 public:
-    ThreadedBruteforce(uint8_t, std::string);
-    ~ThreadedBruteforce();
+    ThreadedBruteforce(uint8_t, std::string, Bruteforce*);
+    virtual ~ThreadedBruteforce() = default;
 
     void threadedBruteforcer(uint8_t);
 
+//    std::deque<std::thread> &getBruteforcers();
+
+    const uint8_t getNbThreads() const;
+
 private:
     const uint8_t nbThreads;
-    std::deque<std::thread> bruteforcers;
+//    std::deque<std::thread> bruteforcers;
     std::mutex mutex;
     std::condition_variable cv;
     const std::string hashedPass;
 
     std::atomic<bool> foundHash;
+    Bruteforce* bruteforce;
 };
 
 #endif

@@ -3,11 +3,13 @@
 
 #include <condition_variable>
 #include <cstring>
-#include <deque>
+#include <map>
 #include <mutex>
 #include <string>
 #include <sstream>
 #include <vector>
+#include <thread>
+#include <deque>
 
 #include "sha.h"
 #include "HashConsumer.h"
@@ -15,25 +17,36 @@
 /** Simple class that generates a hash. */
 class HashProducer {
 public:
-    explicit HashProducer(std::string alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ");
+    explicit HashProducer(std::string alphabet = "abcdefgh");//"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ");
 
     /** Generates all anagram of the current alphabet. */
     void startWordGeneration();
-    const std::string& consumeWord();
+
+    bool isHashAvailable();
+
+    bool isRunning();
+
+    const std::string consumeWord();
+
+    void notifyHashFound(bool hashFound, std::string);
 private:
     std::string alphabet;
-    std::vector<HashConsumer> consumers;
-    std::deque<std::string> generatedHashes;
+    bool shouldStop;
+    std::map<std::string, std::string> generatedHashesMap; // Pair value of <Hash, Original Word>
+    std::deque<std::string> generatedHashes; // Pair value of <Hash, Original Word>
     std::mutex mutex;
+    std::mutex runningMutex;
+    std::mutex isHashEmptyMutex;
+    std::mutex hashFoundMutex;
     std::condition_variable condition;
-    SHA256_CTX sha256;
+
     /**
      * Generates hash.
      *
      * @param wordToHash The word to hash.
      * @return The hash value of the given word.
      */
-    const std::string hashWord(char **wordToHash);
+    const std::string hashWord(const char*, char*);
 };
 
 
