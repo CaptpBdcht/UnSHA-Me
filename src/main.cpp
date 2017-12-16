@@ -33,7 +33,7 @@ int main(int argc, char **argv) {
     );
 
     for (uint8_t i = 1; i <= tbf->getNbThreads(); ++i) {
-        threads.emplace_back(std::thread(startBruteForce, tbf, i));
+        threads.emplace_back(std::thread(std::bind(startBruteForce, tbf, i)));
     }
 
     for (auto &thread: threads) {
